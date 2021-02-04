@@ -4,6 +4,6 @@ SETTINGS = {'random seed': 1,
             'batch size': 128,
             'num epochs': 10,
             'cuda device': 0,
-            'num workers': 4,
+            'num workers': 0,
             'validation fraction': 0.1}
 
