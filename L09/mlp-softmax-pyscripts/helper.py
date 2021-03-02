@@ -27,7 +27,7 @@ def set_deterministic():
 
 
 def plot_training_loss(minibatch_loss_list, num_epochs, iter_per_epoch,
-                       averaging_iterations=100):
+                       results_dir, averaging_iterations=100):
 
     plt.figure()
     ax1 = plt.subplot(1, 1, 1)
@@ -65,12 +65,12 @@ def plot_training_loss(minibatch_loss_list, num_epochs, iter_per_epoch,
     ###################
 
     plt.tight_layout()
-
-    plt.savefig(os.path.join('plot_training_loss.pdf'))
+    image_path = os.path.join(results_dir, 'plot_training_loss.pdf')
+    plt.savefig(image_path)
     plt.clf()
 
 
-def plot_accuracy(train_acc_list, valid_acc_list):
+def plot_accuracy(train_acc_list, valid_acc_list, results_dir):
 
     num_epochs = len(train_acc_list)
 
@@ -84,7 +84,8 @@ def plot_accuracy(train_acc_list, valid_acc_list):
     plt.legend()
 
     plt.tight_layout()
-    plt.savefig('plot_acc_training_validation.pdf')
+    image_path = os.path.join(results_dir, 'plot_acc_training_validation.pdf')
+    plt.savefig(image_path)
     plt.clf()
 
 
@@ -178,8 +179,8 @@ def compute_accuracy(model, data_loader, device):
             features = features.to(device)
             targets = targets.float().to(device)
 
-            logits, probas = model(features)
-            _, predicted_labels = torch.max(probas, 1)
+            logits = model(features)
+            _, predicted_labels = torch.max(logits, 1)
 
             num_examples += targets.size(0)
             correct_pred += (predicted_labels == targets).sum()

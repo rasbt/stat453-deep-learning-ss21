@@ -1,0 +1,10 @@
+random seed: 1
+num class labels: 10
+learning rate: 0.001
+batch size: 128
+input size: 784
+hidden layer size: 100
+num epochs: 10
+cuda device: 0
+num workers: 0
+validation fraction: 0.1
