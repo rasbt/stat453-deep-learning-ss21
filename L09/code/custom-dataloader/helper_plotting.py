@@ -90,7 +90,7 @@ def show_examples(model, data_loader):
 
     for idx, ax in enumerate(axes.ravel()):
         ax.imshow(nhw_img[idx], cmap='binary')
-        ax.title.set_text(f'P: {targets[idx]} | T: {predictions[idx]}')
+        ax.title.set_text(f'P: {predictions[idx]} | T: {targets[idx]}')
         ax.axison = False
 
     plt.tight_layout()
