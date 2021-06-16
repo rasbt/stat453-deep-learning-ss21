@@ -6,6 +6,7 @@ import time
 import torch
 import torch.nn.functional as F
 import torchvision
+import torch.autograd
 
 
 def train_classifier_simple_v1(num_epochs, model, optimizer, device,
@@ -444,9 +445,12 @@ def train_gan_v2(num_epochs, model, optimizer_gen, optimizer_discr,
 
 
 def train_wgan_v1(num_epochs, model, optimizer_gen, optimizer_discr, 
-                 latent_dim, device, train_loader,
-                 logging_interval=100, 
-                 save_model=None):
+                  latent_dim, device, train_loader,
+                  discr_iter_per_generator_iter=5,
+                  logging_interval=100, 
+                  gradient_penalty=False,
+                  gradient_penalty_weight=10,
+                  save_model=None):
     
     log_dict = {'train_generator_loss_per_batch': [],
                 'train_discriminator_loss_per_batch': [],
@@ -454,10 +458,11 @@ def train_wgan_v1(num_epochs, model, optimizer_gen, optimizer_discr,
                 'train_discriminator_fake_acc_per_batch': [],
                 'images_from_noise_per_epoch': []}
 
+    if gradient_penalty:
+        log_dict['train_gradient_penalty_loss_per_batch'] = []
 
     def loss_fn(y_pred, y_true):
         return -torch.mean(y_pred * y_true)
-
 
     # Batch of latent (noise) vectors for
     # evaluating / visualizing the training progress
@@ -503,18 +508,53 @@ def train_wgan_v1(num_epochs, model, optimizer_gen, optimizer_discr,
             discr_pred_fake = model.discriminator_forward(fake_images.detach()).view(-1)
             fake_loss = loss_fn(discr_pred_fake, fake_labels)
             # fake_loss.backward()
-
+            
             # combined loss
             discr_loss = 0.5*(real_loss + fake_loss)
+
+            ###################################################
+            # gradient penalty
+            if gradient_penalty:
+
+                alpha = torch.rand(batch_size, 1, 1, 1).to(device)
+
+                interpolated = alpha * real_images + (1 - alpha) * fake_images.detach()
+                interpolated.requires_grad = True
+
+                discr_out = model.discriminator_forward(interpolated)
+
+                grad_values = torch.ones(discr_out.size()).to(device)
+                gradients = torch.autograd.grad(
+                    outputs=discr_out,
+                    inputs=interpolated,
+                    grad_outputs=grad_values,
+                    create_graph=True,
+                    retain_graph=True)[0]
+
+                gradients = gradients.view(batch_size, -1)
+
+                # calc. norm of gradients, adding epsilon to prevent 0 values
+                epsilon = 1e-13
+                gradients_norm = torch.sqrt(
+                    torch.sum(gradients ** 2, dim=1) + epsilon)
+
+                gp_penalty_term = ((gradients_norm - 1) ** 2).mean() * gradient_penalty_weight
+                discr_loss += gp_penalty_term
+                
+                log_dict['train_gradient_penalty_loss_per_batch'].append(gp_penalty_term.item())
+            #######################################################
+            
             discr_loss.backward()
 
             optimizer_discr.step()
             
-            for p in model.discriminator.parameters():
-                p.data.clamp_(-0.01, 0.01)
+            # Use weight clipping (standard Wasserstein GAN)
+            if not gradient_penalty:
+                for p in model.discriminator.parameters():
+                    p.data.clamp_(-0.01, 0.01)
 
             
-            if skip_generator < 6:
+            if skip_generator <= discr_iter_per_generator_iter:
                 
                 # --------------------------
                 # Train Generator
