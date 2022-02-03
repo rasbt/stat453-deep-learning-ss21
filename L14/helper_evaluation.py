@@ -15,7 +15,7 @@ def set_all_seeds(seed):
     torch.cuda.manual_seed_all(seed)
 
 
-def set_deterministic():
+def set_deterministic(use_tensorcores=False):
     if torch.cuda.is_available():
         torch.backends.cudnn.benchmark = False
         torch.backends.cudnn.deterministic = True
@@ -24,6 +24,14 @@ def set_deterministic():
         torch.set_deterministic(True)
     else:
         torch.use_deterministic_algorithms(True)
+        
+        # The following are set to True by default and allow cards
+        # like the Ampere and newer to utilize tensorcores for
+        # convolutions and matrix multiplications, which can result
+        # in a significant speed-up. However, results may differ compared
+        # to card how don't use mixed precision via tensor cores.
+        torch.backends.cuda.matmul.allow_tf32 = use_tensorcores
+        torch.backends.cudnn.allow_tf32 = use_tensorcores
 
 
 def compute_accuracy(model, data_loader, device):
