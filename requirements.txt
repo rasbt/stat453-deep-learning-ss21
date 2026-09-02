@@ -1,0 +1,33 @@
+# Core requirements to run the notebooks and helper scripts in this repo.
+# Tested with Python 3.10 (avoid 3.12+ for L09-L14, see README "Known issues").
+#
+# Install with:
+#   pip install -r requirements.txt
+
+torch>=2.0
+torchvision>=0.15
+numpy
+pandas
+matplotlib
+scikit-learn
+scipy
+
+# NLP lectures (L15, L19)
+nltk
+torchtext
+spacy
+transformers
+unidecode
+
+# GAN / autoencoder lectures (L16-L18)
+imageio
+adabelief-pytorch
+
+# Misc utilities used by individual scripts
+pyyaml
+requests
+pillow
+
+# Notebook environment
+jupyterlab
+ipykernel

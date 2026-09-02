@@ -1,0 +1,39 @@
+# Conda environment for this repo.
+#
+# Create with:
+#   conda env create -f environment.yml
+# Activate with:
+#   conda activate mscs435-dl
+#
+# Python 3.10 is pinned deliberately: helper_evaluation.py in L09-L14 imports
+# distutils, which was removed from the standard library in Python 3.12.
+# See README "Known issues" before upgrading.
+
+name: mscs435-dl
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pytorch>=2.0
+  - torchvision>=0.15
+  - numpy
+  - pandas
+  - matplotlib
+  - scikit-learn
+  - scipy
+  - nltk
+  - spacy
+  - pyyaml
+  - requests
+  - pillow
+  - jupyterlab
+  - ipykernel
+  - pip
+  - pip:
+      - torchtext
+      - transformers
+      - unidecode
+      - imageio
+      - adabelief-pytorch

@@ -3,7 +3,6 @@ import os
 import numpy as np
 import random
 import torch
-from distutils.version import LooseVersion as Version
 
 
 def set_all_seeds(seed):
@@ -15,14 +14,17 @@ def set_all_seeds(seed):
 
 
 def set_deterministic():
+    # MSCS435 (atwumasi): required by torch.use_deterministic_algorithms(True)
+    # on GPU (CuBLAS ops are otherwise nondeterministic); must be set before
+    # any CUDA context/op, so it goes first.
+    os.environ['CUBLAS_WORKSPACE_CONFIG'] = ':4096:8'
     if torch.cuda.is_available():
         torch.backends.cudnn.benchmark = False
         torch.backends.cudnn.deterministic = True
 
-    if torch.__version__ <= Version("1.7"):
-        torch.set_deterministic(True)
-    else:
-        torch.use_deterministic_algorithms(True)
+    # MSCS435 (atwumasi): dropped the distutils-based torch<1.7 branch —
+    # distutils was removed in Python 3.12, and torch<1.7 is no longer relevant.
+    torch.use_deterministic_algorithms(True)
 
 
 def compute_accuracy(model, data_loader, device):

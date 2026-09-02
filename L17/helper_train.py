@@ -212,7 +212,9 @@ def train_vae_v1(num_epochs, model, optimizer, device,
                     model, train_loader, loss_fn, device)
                 print('***Epoch: %03d/%03d | Loss: %.3f' % (
                       epoch+1, num_epochs, train_loss))
-                log_dict['train_combined_per_epoch'].append(train_loss.item())
+                # MSCS435 (atwumasi): fixed key mismatch (was 'train_combined_per_epoch',
+                # which didn't match the dict initialized above and raised KeyError).
+                log_dict['train_combined_loss_per_epoch'].append(train_loss.item())
 
         print('Time elapsed: %.2f min' % ((time.time() - start_time)/60))
     
