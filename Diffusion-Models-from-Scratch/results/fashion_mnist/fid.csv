@@ -1,0 +1,6 @@
+label,dataset,arch,schedule,epoch,weights,sampler,steps,eta,num_samples,fid,gen_seconds,sec_per_image
+fashion_mnist,fashion_mnist,unet,linear,15,ema,ddim,10,0.0,5000,12.78,16.7,0.0033
+fashion_mnist,fashion_mnist,unet,linear,15,ema,ddim,20,0.0,5000,9.27,29.7,0.0059
+fashion_mnist,fashion_mnist,unet,linear,15,ema,ddim,50,0.0,5000,8.02,68.8,0.0138
+fashion_mnist,fashion_mnist,unet,linear,15,ema,ddim,100,0.0,5000,7.99,133.4,0.0267
+fashion_mnist,fashion_mnist,unet,linear,15,ema,ddpm,1000,,5000,8.13,1308.9,0.2618

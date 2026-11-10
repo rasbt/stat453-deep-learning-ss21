@@ -1,0 +1,6 @@
+label,dataset,arch,schedule,epoch,weights,sampler,steps,eta,num_samples,fid,gen_seconds,sec_per_image
+mnist,mnist,unet,linear,15,ema,ddpm,1000,,5000,4.78,1303.4,0.2607
+mnist,mnist,unet,linear,15,ema,ddim,10,0.0,5000,9.99,26.0,0.0052
+mnist,mnist,unet,linear,15,ema,ddim,20,0.0,5000,6.26,63.9,0.0128
+mnist,mnist,unet,linear,15,ema,ddim,50,0.0,5000,5.13,137.0,0.0274
+mnist,mnist,unet,linear,15,ema,ddim,100,0.0,5000,4.97,276.9,0.0554

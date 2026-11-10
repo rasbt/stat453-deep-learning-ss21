@@ -1,0 +1,36 @@
+dataset: fashion_mnist
+seed: -1                      # -1 = random seed each run
+
+train:
+  epochs: 15
+  batch_size: 64
+  lr: 2.0e-5                  # the upstream value; this run predates the rebuild
+  ema_decay: 0.9999
+  ema_warmup: true            # ramp the EMA decay up from 0; without it short runs sample as noise
+  grad_clip: null
+  num_workers: 4
+
+diffusion:
+  schedule: linear            # linear | cosine
+  timesteps: 1000
+  variance: beta              # beta | posterior  (sigma_t^2 used in the reverse step)
+
+model:
+  arch: legacy
+  channels:   [64, 128, 256, 512, 512, 384]
+  attentions: [false, true, false, false, false, true]
+  upscales:   [false, false, false, true, true, true]
+  num_groups: 32
+  dropout: 0.0
+  num_heads: 8
+
+sample:
+  sampler: ddpm               # ddpm (ancestral, T steps) | ddim
+  ddim_steps: 50              # model evaluations when sampler is ddim
+  ddim_eta: 0.0               # 0 = deterministic DDIM, 1 = DDPM-like noise
+  num_samples: 10
+  snapshot_steps: [999, 700, 550, 400, 300, 200, 100, 50, 15, 0]
+
+paths:
+  checkpoint: checkpoints/fashion_mnist_legacy/ddpm_checkpoint.pt
+  results: results/fashion_mnist_legacy

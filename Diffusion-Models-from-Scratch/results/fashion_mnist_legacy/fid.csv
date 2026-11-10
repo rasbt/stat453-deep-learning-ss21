@@ -1,0 +1,6 @@
+label,dataset,arch,schedule,epoch,weights,sampler,steps,eta,num_samples,fid,gen_seconds,sec_per_image
+fashion_mnist_legacy,fashion_mnist,legacy,linear,15,raw,ddpm,1000,,5000,72.37,3174.7,0.6349
+fashion_mnist_legacy,fashion_mnist,legacy,linear,15,raw,ddim,10,0.0,5000,74.49,43.2,0.0086
+fashion_mnist_legacy,fashion_mnist,legacy,linear,15,raw,ddim,20,0.0,5000,72.24,77.2,0.0154
+fashion_mnist_legacy,fashion_mnist,legacy,linear,15,raw,ddim,50,0.0,5000,78.15,180.2,0.0360
+fashion_mnist_legacy,fashion_mnist,legacy,linear,15,raw,ddim,100,0.0,5000,77.61,362.3,0.0725
