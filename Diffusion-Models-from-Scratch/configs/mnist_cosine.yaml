@@ -1,0 +1,37 @@
+dataset: mnist
+seed: -1                      # -1 = random seed each run
+
+train:
+  epochs: 15
+  batch_size: 64
+  lr: 2.0e-4                  # Ho et al. use 2e-4 for 32x32 images
+  ema_decay: 0.9999
+  ema_warmup: true            # ramp the EMA decay up from 0; without it short runs sample as noise
+  grad_clip: 1.0
+  num_workers: 4
+
+diffusion:
+  schedule: cosine            # linear | cosine
+  timesteps: 1000
+  variance: beta              # beta | posterior  (sigma_t^2 used in the reverse step)
+
+model:
+  arch: unet                  # unet (paper-style) | legacy (original upstream network)
+  base_channels: 64
+  channel_mults: [1, 2, 2, 2] # widths at 32x32, 16x16, 8x8, 4x4 = base * mult
+  num_res_blocks: 2           # ResBlocks per resolution in the encoder (decoder gets one more)
+  attention_resolutions: [16] # self-attention at these feature-map sizes (and in the middle block)
+  num_heads: 4
+  num_groups: 32
+  dropout: 0.0
+
+sample:
+  sampler: ddpm               # ddpm (ancestral, T steps) | ddim
+  ddim_steps: 50              # model evaluations when sampler is ddim
+  ddim_eta: 0.0               # 0 = deterministic DDIM, 1 = DDPM-like noise
+  num_samples: 10
+  snapshot_steps: [999, 700, 550, 400, 300, 200, 100, 50, 15, 0]
+
+paths:
+  checkpoint: checkpoints/mnist_cosine/ddpm_checkpoint.pt
+  results: results/mnist_cosine

@@ -1,0 +1,6 @@
+label,dataset,arch,schedule,epoch,weights,sampler,steps,eta,num_samples,fid,gen_seconds,sec_per_image
+cifar10,cifar10,unet,linear,105,ema,ddim,10,0.0,5000,34.87,64.1,0.0128
+cifar10,cifar10,unet,linear,105,ema,ddim,20,0.0,5000,28.06,137.4,0.0275
+cifar10,cifar10,unet,linear,105,ema,ddim,50,0.0,5000,24.61,213.8,0.0428
+cifar10,cifar10,unet,linear,105,ema,ddim,100,0.0,5000,22.89,277.0,0.0554
+cifar10,cifar10,unet,linear,105,ema,ddpm,1000,,5000,16.30,2729.0,0.5458

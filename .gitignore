@@ -129,3 +129,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# MSCS435 (atwumasi): datasets downloaded at runtime by notebooks —
+# regenerate via the notebook's download cell rather than committing them.
+L19/distilbert-classifier/movie_data.csv
+L19/distilbert-classifier/movie_data.csv.gz
+
+# MSCS435 (atwumasi): fine-tuned model weights saved by notebooks —
+# regenerate via training rather than committing them (large binaries).
+saved_model/

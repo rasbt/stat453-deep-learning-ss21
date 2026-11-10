@@ -1,0 +1,6 @@
+data/
+checkpoints/
+__pycache__/
+*.pyc
+logs/
+results/fid_stats/*.npz

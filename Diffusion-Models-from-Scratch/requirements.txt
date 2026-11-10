@@ -1,0 +1,10 @@
+torch
+torchvision
+einops
+timm
+pyyaml
+tqdm
+numpy
+pytorch-fid
+pytest
+pillow

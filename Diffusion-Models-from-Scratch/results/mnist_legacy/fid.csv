@@ -1,0 +1,6 @@
+label,dataset,arch,schedule,epoch,weights,sampler,steps,eta,num_samples,fid,gen_seconds,sec_per_image
+mnist_legacy,mnist,legacy,linear,15,ema,ddpm,1000,,5000,7.09,1589.0,0.3178
+mnist_legacy,mnist,legacy,linear,15,ema,ddim,10,0.0,5000,12.25,26.9,0.0054
+mnist_legacy,mnist,legacy,linear,15,ema,ddim,20,0.0,5000,10.99,39.3,0.0079
+mnist_legacy,mnist,legacy,linear,15,ema,ddim,50,0.0,5000,11.17,168.3,0.0337
+mnist_legacy,mnist,legacy,linear,15,ema,ddim,100,0.0,5000,11.38,322.3,0.0645

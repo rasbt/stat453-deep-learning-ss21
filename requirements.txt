@@ -1,0 +1,49 @@
+# Core requirements to run the notebooks and helper scripts in this repo.
+# Tested with Python 3.10 (avoid 3.12+ for L09-L14, see README "Known issues").
+#
+# torch/torchvision are pinned to a CUDA 12.4 build via the extra index below,
+# matching an NVIDIA driver of 550.x+ (check `nvidia-smi`, top-right "CUDA
+# Version"). If your driver supports a different CUDA version, swap cu124 for
+# the matching tag from https://pytorch.org/get-started/locally/ (e.g. cu121,
+# cu118), or drop the --extra-index-url line entirely for a CPU-only build.
+# A plain `torch` install without this pin can silently resolve to a newer
+# CUDA build than your driver supports (a "CUDA driver too old" error at
+# runtime, not install time) -- see README "Known issues".
+#
+# Install with:
+#   pip install -r requirements.txt
+
+--extra-index-url https://download.pytorch.org/whl/cu124
+torch==2.6.0+cu124
+torchvision==0.21.0+cu124
+numpy
+pandas
+matplotlib
+scikit-learn
+scipy
+
+# NLP lectures (L15, L19)
+# NOTE: torchtext's compiled extension is ABI-locked to a specific torch
+# minor version and has no build compatible with torch>=2.4 (see README
+# "Known issues" -- L15's notebooks are currently broken as a result).
+nltk
+torchtext
+spacy
+transformers
+unidecode
+
+# GAN / autoencoder lectures (L16-L18)
+imageio
+adabelief-pytorch
+
+# Misc utilities used by individual scripts
+pyyaml
+requests
+pillow
+
+# Notebook environment
+jupyterlab
+ipykernel
+
+# Used by the %load_ext watermark / %watermark cells throughout the notebooks
+watermark

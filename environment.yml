@@ -1,0 +1,53 @@
+# Conda environment for this repo.
+#
+# Create with:
+#   conda env create -f environment.yml
+# Activate with:
+#   conda activate mscs435-dl
+#
+# Python 3.10 is pinned deliberately: helper_evaluation.py in L09-L14 imports
+# distutils, which was removed from the standard library in Python 3.12.
+# See README "Known issues" before upgrading.
+#
+# torch/torchvision are installed via pip (not the conda `pytorch` channel)
+# pinned to a CUDA 12.4 build, matching an NVIDIA driver of 550.x+ (check
+# `nvidia-smi`, top-right "CUDA Version"). If your driver supports a
+# different CUDA version, swap cu124 for the matching tag from
+# https://pytorch.org/get-started/locally/, or drop the --extra-index-url
+# line under pip for a CPU-only build. An unpinned/default torch install can
+# silently resolve to a newer CUDA build than your driver supports (a "CUDA
+# driver too old" error at runtime, not install time).
+
+name: mscs435-dl
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - numpy
+  - pandas
+  - matplotlib
+  - scikit-learn
+  - scipy
+  - nltk
+  - spacy
+  - pyyaml
+  - requests
+  - pillow
+  - jupyterlab
+  - ipykernel
+  - pip
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu124
+      - torch==2.6.0+cu124
+      - torchvision==0.21.0+cu124
+      # NOTE: torchtext's compiled extension is ABI-locked to a specific
+      # torch minor version and has no build compatible with torch>=2.4
+      # (see README "Known issues" -- L15's notebooks are currently broken
+      # as a result).
+      - torchtext
+      - transformers
+      - unidecode
+      - imageio
+      - adabelief-pytorch
+      - watermark

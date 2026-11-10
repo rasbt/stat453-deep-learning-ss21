@@ -206,7 +206,9 @@ def train_vae_v1(num_epochs, model, optimizer, device,
                     model, train_loader, loss_fn, device)
                 print('***Epoch: %03d/%03d | Loss: %.3f' % (
                       epoch+1, num_epochs, train_loss))
-                log_dict['train_combined_per_epoch'].append(train_loss.item())
+                # MSCS435 (atwumasi): fixed key mismatch (was 'train_combined_per_epoch',
+                # which didn't match the dict initialized above and raised KeyError).
+                log_dict['train_combined_loss_per_epoch'].append(train_loss.item())
 
         print('Time elapsed: %.2f min' % ((time.time() - start_time)/60))
     
@@ -554,8 +556,12 @@ def train_wgan_v1(num_epochs, model, optimizer_gen, optimizer_discr,
                     p.data.clamp_(-0.01, 0.01)
 
             
-            if skip_generator <= discr_iter_per_generator_iter:
-                
+            # MSCS435 (atwumasi): condition was inverted (`<=`, incrementing on the
+            # trained branch and resetting on the skipped branch), which trained the
+            # generator on most batches instead of the discriminator `discr_iter_per_generator_iter`
+            # times per generator update, as WGAN requires.
+            if skip_generator >= discr_iter_per_generator_iter:
+
                 # --------------------------
                 # Train Generator
                 # --------------------------
@@ -568,11 +574,11 @@ def train_wgan_v1(num_epochs, model, optimizer_gen, optimizer_discr,
                 gener_loss.backward()
 
                 optimizer_gen.step()
-                
-                skip_generator += 1
-                
-            else:
+
                 skip_generator = 1
+
+            else:
+                skip_generator += 1
                 gener_loss = torch.tensor(0.)
 
             # --------------------------
